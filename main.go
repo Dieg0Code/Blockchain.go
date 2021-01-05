@@ -10,6 +10,7 @@ import (
 	"github.com/Dieg0Code/Blockchain.go/blockchain"
 )
 
+// CommandLine : CLI struct
 type CommandLine struct {
 	blockchain *blockchain.BlockChain
 }

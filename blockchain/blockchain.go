@@ -6,10 +6,13 @@ import (
 	"github.com/dgraph-io/badger"
 )
 
+//BadgerDB v1.5.4
+// Badger is a key - value database written in pure Go
 const (
 	dbPath = "./tmp/blocks"
 )
 
+// BlockChain : BlockChain struct
 type BlockChain struct {
 	LastHash []byte
 	Database *badger.DB
@@ -20,6 +23,7 @@ type BlockChainIterator struct {
 	Database    *badger.DB
 }
 
+//InitBlockChain : initialize the DB and the blockchain as well
 func InitBlockChain() *BlockChain {
 	var lastHash []byte
 
@@ -56,6 +60,7 @@ func InitBlockChain() *BlockChain {
 	return &blockchain
 }
 
+//AddBlock : add a new block to the chain
 func (chain *BlockChain) AddBlock(data string) {
 	var lastHash []byte
 
