@@ -1,10 +1,5 @@
 package blockchain
 
-import (
-	"bytes"
-	"crypto/sha256"
-)
-
 /*
 	A Blockchain is essentially a public database that is distributed accross multiple
 	different pairs
@@ -20,20 +15,19 @@ type Block struct {
 	Hash     []byte //represent the hash of this block
 	Data     []byte //represent the data inside this block
 	PrevHash []byte //represent the last block hash, this allow us to link the block together
+	Nonce    int
 	// each block inside a blockchain references the last block that was created inside the blockchain
-}
-
-//DeriveHash : Generate the hash of a Block
-func (b *Block) DeriveHash() {
-	info := bytes.Join([][]byte{b.Data, b.PrevHash}, []byte{})
-	hash := sha256.Sum256(info)
-	b.Hash = hash[:]
 }
 
 // CreateBlock : Create a block
 func CreateBlock(data string, prevHash []byte) *Block {
-	block := &Block{[]byte{}, []byte(data), prevHash}
-	block.DeriveHash()
+	block := &Block{[]byte{}, []byte(data), prevHash, 0}
+	pow := NewProof(block)
+	nonce, hash := pow.Run()
+
+	block.Hash = hash[:]
+	block.Nonce = nonce
+
 	return block
 }
 

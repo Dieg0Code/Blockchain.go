@@ -2,8 +2,11 @@ package blockchain
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
+	"fmt"
 	"log"
+	"math"
 	"math/big"
 )
 
@@ -78,11 +81,56 @@ func (pow *ProofOfWork) InitData(nonce int) []byte {
 		[][]byte{
 			pow.Block.PrevHash,
 			pow.Block.Data,
+			ToHex(int64(nonce)),
+			ToHex(int64(Difficulty)),
 		},
 		[]byte{},
 	)
 	return data
 }
+
+func (pow *ProofOfWork) Run() (int, []byte) {
+	var intHash big.Int
+	var hash [32]byte
+
+	nonce := 0
+
+	for nonce < math.MaxInt64 {
+		data := pow.InitData(nonce)
+		hash = sha256.Sum256(data)
+
+		fmt.Printf("\r%x", hash)
+		intHash.SetBytes(hash[:])
+
+		if intHash.Cmp(pow.Target) == -1 {
+			break
+		} else {
+			nonce++
+		}
+	}
+	fmt.Println()
+
+	return nonce, hash[:]
+}
+
+func (pow *ProofOfWork) Validate() bool {
+	var intHash big.Int
+
+	data := pow.InitData(pow.Block.Nonce)
+
+	hash := sha256.Sum256(data)
+	intHash.SetBytes(hash[:])
+
+	return intHash.Cmp(pow.Target) == -1
+}
+
+/* what makes this proof of work algorithm very secure for a blockchain is this idea that if you
+want to change a block inside of the chain you have to recalculate the hash it self wish takes a
+large amount of time and the you have to recalculate every block after that block hash as well to be
+able to say "this is valid data" so even now we can validate that a block is valid fairly quickely
+the actual work needed to create to create the block or to sign the block is pretty difficult and that
+protects the blockchain data from being tempered by one single entity or even by a large amounts of entities
+*/
 
 func ToHex(num int64) []byte {
 	buff := new(bytes.Buffer)
