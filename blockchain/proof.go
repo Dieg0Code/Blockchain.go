@@ -12,7 +12,7 @@ import (
 
 /*
 
-Consensu algorithms or proof algorithms:
+Consensus algorithms or proof algorithms:
 
 Proof of work:
 Secure the blockchain by forcing the network to do work to add a block
@@ -128,7 +128,7 @@ func (pow *ProofOfWork) Validate() bool {
 want to change a block inside of the chain you have to recalculate the hash it self wish takes a
 large amount of time and the you have to recalculate every block after that block hash as well to be
 able to say "this is valid data" so even now we can validate that a block is valid fairly quickely
-the actual work needed to create to create the block or to sign the block is pretty difficult and that
+the actual work needed to create the block or to sign the block is pretty difficult and that
 protects the blockchain data from being tempered by one single entity or even by a large amounts of entities
 */
 
