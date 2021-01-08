@@ -24,25 +24,52 @@ type TxInput struct {
 type TxOutput struct {
 	Value  int    //value in tokens
 	Pubkey string //needed to unlock tokens inside value field
-	//Outputs are indivisible you can reference a part of an output
-	/* if you walk into a store and you buy 5 dolars then pay with 10 dollars to the cashier
-	the cashier cant just rip the 10 dollar bill on half and hand you the other half
-	you back, instead he have to give you back a 5 dollar bill.
 
-	So there is 10 tokens inside of our output we need to create new outputs one with
-	5 tokens inside of it and another one with 5 tokens inside of it.
+	//Outputs are indivisible you can't reference a part of an output
+	/*
+		An analogy to this is :
+		if you walk into a store and you buy 5 dolars then pay with 10 dollars to the cashier
+		the cashier cant just rip the 10 dollar bill on half and hand you the other half
+		you back, instead he have to give you back a 5 dollar bill.
+
+		So there is 10 tokens inside of our output we need to create new outputs one with
+		5 tokens inside of it and another one with 5 tokens inside of it.
+
+		Esp:
+
+		- Los Outputs son indivisibles, no puedes hacer referencia a solo una parte de este.
+
+		Una analogia :
+		Si entras a una tienda y compras 5 dolares en productos luego le pagas al cajero con un
+		billete de 10 dolares el cajero no puede solo partir el billete por la mitad y luego darte
+		la otra mitad, en vez de eso tiene que darte de vuelta otro billete de 5 dolares
+
+		Asique si hay 10 tokens dentro de nuestro output necesitariamos crear nuevos outputs, uno con 5
+		tokens dentro y otro con 5 tokens dentro también.
 	*/
 }
 
-/* In our blockchain we have our genesis block in that block we
-also have our first transaction this is wath's called a coinbase transaction,
-in this transaction we only one input and only one output and the input inside of it
-rether than referencing an older output because there's no olders outputs just references an
-empty output it also doesn't store a signature instead store a bunch of arbitrary data the coinbase
-also has what's called the subsidy or a reward attached to it this reward is released a single account
-when that individual mines the coinbase.
-In our impl we are just going to add a constant for our coinbases then we're mainly just doing this
-to make things simpler for now.
+/*
+	In our blockchain we have our genesis block in that block we
+	also have our first transaction this is wath's called a coinbase transaction,
+	in this transaction we only have one input and only one output and the input inside of it
+	rether than referencing an older output, because there's no olders outputs, just references an
+	empty output it also doesn't store a signature instead store a bunch of arbitrary data, the coinbase
+	also has what's called the subsidy or a reward attached to it, this reward is released to a single account
+	when that individual mines the coinbase.
+	In our impl we are just going to add a constant for our coinbases then we're mainly just doing this
+	to make things simpler for now.
+
+	Esp:
+
+	En nuestra blockchain tenemos el bloque génesis en ese bloque también tenemos la primera transacción,
+	esto es lo que es llamado transacción "Coinbase", en esta transacción solo tenemos un solo input y un solo output
+	y dentro de ese output en vez de hacer referencia a un output anterior, porque no hay outputs anteriores, solo
+	hace referencia a un output vació, tampoco almacena una firma en vez de eso almacena un puñado de datos arbitrarios,
+	la coinbase también tiene lo que es llamado el subsidio o una recompensa añadida a el, esta recompensa es liberada
+	a una cuenta individual cuando esa cuenta mina la coinbase.
+	En nuestra implementación solo vamos a añadir una constante para nuestra coinbase luego manualmente vamos a hacer eso
+	para hacer la cosas mas simples por ahora.
 */
 
 //SetID : Creates a hash based on bytes that represents the transaction
