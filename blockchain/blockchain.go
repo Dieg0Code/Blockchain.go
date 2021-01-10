@@ -1,6 +1,7 @@
 package blockchain
 
 import (
+	"encoding/hex"
 	"fmt"
 	"os"
 	"runtime"
@@ -151,4 +152,49 @@ func (iter *BlockChainIterator) Next() *Block {
 	iter.CurrentHash = block.PrevHash
 
 	return block
+}
+
+//FindUnspentTransactions : Find all unspent transactions witch are assigned to an address
+func (chain *BlockChain) FindUnspentTransactions(address string) []Transaction {
+	var unspentTxs []Transaction //array of transactions
+
+	spentTXOs := make(map[string][]int) // where keys are strings and values are slice of ints
+
+	iter := chain.Iterator() // iterate through the blockchain in the data base
+
+	for {
+		block := iter.Next()
+
+		for _, tx := range block.Transactions { // iterate through each of the transactions inside of a block
+			txID := hex.EncodeToString(tx.ID) // take the transaction IDs of each of the transactions and encoded into hexadecimal
+
+		Outputs: // label to break from the inside to this portion of the for loop and not break up of these other two for loops
+			for outIdx, out := range tx.Outputs { //iterate through of the outputs inside of the transaction
+				if spentTXOs[txID] != nil { //check if the output is inside of our map
+					for _, spentOut := range spentTXOs[txID] { //if is not iterate through the map
+						if spentOut == outIdx { // if spendOut is equal to the output index
+							continue Outputs // continues the Outputs for loop
+						}
+					}
+				}
+				if out.CanBeUnlocked(address) { // determinate if the output can be unlocked by the address that we are searching for
+					unspentTxs = append(unspentTxs, *tx) //take each of the transactions that can be unlock by these address an put in into the unspent transactions
+				}
+			}
+			if tx.IsCoinbase() == false { // check if the transaction is a coinbase transaction or not
+				for _, in := range tx.Inputs { // if not iterate through the transaction inputs, is a way to find other outputs that are referenced by inputs
+					if in.CanUnlock(address) { // if we find other outputs check if we can unlock that outputs with the address
+						inTxID := hex.EncodeToString(in.ID)
+						spentTXOs[inTxID] = append(spentTXOs[inTxID], in.Out) // if we can put it insede of the map
+					}
+				}
+			}
+		}
+
+		if len(block.PrevHash) == 0 { // if the block is the genesis block break
+			break
+		}
+	}
+
+	return unspentTxs //return the unspent transactions array which would have all unspent transaction which are assigned to the user account which we push through this function
 }
