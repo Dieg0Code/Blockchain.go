@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/gob"
+	"encoding/hex"
 	"fmt"
+	"log"
 )
 
 type Transaction struct {
@@ -98,6 +100,39 @@ func CoinbaseTx(to, data string) *Transaction {
 	tx.SetID()                                                 //create hash id for this transaction
 
 	return &tx //return a reference for this transaction
+}
+
+// NewTransaction : creates a new transaction
+func NewTransaction(from, to string, amount int, chain *BlockChain) *Transaction {
+	var inputs []TxInput
+	var outputs []TxOutput
+
+	acc, validOutputs := chain.FindSpendableOutputs(from, amount)
+
+	if acc < amount { // check if the amount is greater than the accumulator
+		log.Panic("Error: not enough funds")
+	}
+
+	for txid, outs := range validOutputs { // iterate through  valid outputs
+		txID, err := hex.DecodeString(txid) // take each and decode the string txid into bytes
+		Handle(err)
+
+		for _, out := range outs { // iterate through the outs
+			input := TxInput{txID, out, from} // creat a new input for each of the unspent outputs
+			inputs = append(inputs, input)
+		}
+	}
+
+	outputs = append(outputs, TxOutput{amount, to}) // create an output with the amount that we are going to send and then the to address which is the person that we are sending to
+
+	if acc > amount { // check if the amount is less than the accumulated which means that the amount that the from user has is greater than the amount that he's trying to send
+		outputs = append(outputs, TxOutput{acc - amount, from}) // create a second output. Is created if there is any left over tokens in the original sender account
+	}
+
+	tx := Transaction{nil, inputs, outputs} // instancies a transaction and passed an inputs and an outputs
+	tx.SetID()                              //set the id of the transaction
+
+	return &tx // return the reference to the transaction
 }
 
 //IsCoinbase : Allow us tho determine if a transaction is a coninbase transaction or not

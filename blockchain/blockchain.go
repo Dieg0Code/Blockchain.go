@@ -198,3 +198,46 @@ func (chain *BlockChain) FindUnspentTransactions(address string) []Transaction {
 
 	return unspentTxs //return the unspent transactions array which would have all unspent transaction which are assigned to the user account which we push through this function
 }
+
+// FindUTXO : find all the unspent transactions outputs
+func (chain *BlockChain) FindUTXO(address string) []TxOutput {
+	var UTXOs []TxOutput
+	unspentTransactions := chain.FindUnspentTransactions(address)
+
+	for _, tx := range unspentTransactions { // iterate through the unspent transactions
+		for _, out := range tx.Outputs { // iterate through the outputs in the transactions
+			if out.CanBeUnlocked(address) { // check if the outputs can be unlocked by the address
+				UTXOs = append(UTXOs, out) // if they can we add them to the unspent transactions output var
+			}
+		}
+	}
+
+	return UTXOs // the return the unspent transactions
+}
+
+// FindSpendableOutputs : find all the unspent outputs and then ensure they have enough tokens inside of them
+func (chain *BlockChain) FindSpendableOutputs(address string, amount int) (int, map[string][]int) {
+	unspentOuts := make(map[string][]int)                // unspent outputs
+	unspentTxs := chain.FindUnspentTransactions(address) // unspent transactions
+	accumulated := 0
+
+Work:
+	for _, tx := range unspentTxs { // iterate through the unspent transactions
+		txID := hex.EncodeToString(tx.ID) // Encode transaction id into hexadecimal and assign it to txID
+
+		for outIdx, out := range tx.Outputs { // iterate through the outputs inside of the unspent transactions
+			if out.CanBeUnlocked(address) && accumulated < amount { // check if the output can be unlocked by the address and if the accumulated is less than the amount that we want to send
+				accumulated += out.Value                              // increment the accumulated value by the output value
+				unspentOuts[txID] = append(unspentOuts[txID], outIdx) // add the output index to the output map
+
+				if accumulated >= amount {
+					break Work
+				}
+
+			}
+
+		}
+	}
+
+	return accumulated, unspentOuts
+}
