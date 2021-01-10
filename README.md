@@ -28,6 +28,16 @@ Por otro lado, al ser un registro consensuado, donde todos los nodos contienen l
 
 Por último, dado que cada bloque está matemáticamente vinculado al bloque siguiente, una vez que se añade uno nuevo a la cadena, el mismo se vuelve inalterable. Si un bloque se modifica su relación con la cadena se rompe. Es decir, que toda la información registrada en los bloques es inmutable y perpetua.
 
+De esta forma la tecnología de blockchain nos permite almacenar información que jamás se podrá perder, modificar o eliminar.
+
+Además, cada nodo de la red utiliza certificados y firmas digitales para verificar la información y validar las transacciones y los datos almacenados en la blockchain, lo que permite asegurar la autenticidad de dicha información.
+
+De esta forma, podemos pensar en blockchain como un escribano. Un medio para certificar y validar cualquier tipo de información. Un registro confiable, descentralizado, resistente a la manipulación de datos, y donde queda todo registrado.
+
+En la actualidad estamos acostumbrados a los modelos centralizados. Le damos toda nuestra información a empresas como Google o Facebook para que la administren, mandamos todos nuestros mensajes a través de los servidores de Telegram o WhatsApp para que se ocupen de enviarlos o gastamos fortunas en escribanos e instituciones para que certifiquen y guarden nuestras escrituras o documentos importantes.
+
+En blockchain los datos están distribuidos en todos los nodos de la red. Al no haber un nodo central, todos participan por igual, almacenando y validando toda la información. Se trata de una herramienta muy potente para comunicarnos y almacenar información de forma confiable; un modelo descentralizado donde la información es nuestra, ya que no dependemos de una compañía que brinde el servicio.
+
 Las blockchain en la practica han sido usadas como un registro contable distribuido que permite soportar y garantizar la seguridad de **dinero digital (Bitcoin)** .
 
 ## Sistema de prueba de trabajo (proof of work)
