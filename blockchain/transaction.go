@@ -123,7 +123,7 @@ func NewTransaction(from, to string, amount int, chain *BlockChain) *Transaction
 		}
 	}
 
-	outputs = append(outputs, TxOutput{amount, to}) // create an output with the amount that we are going to send and then the to address which is the person that we are sending to
+	outputs = append(outputs, TxOutput{amount, to}) // create an output with the amount that we are going to send and then the "to" address which is the person that we are sending to
 
 	if acc > amount { // check if the amount is less than the accumulated which means that the amount that the from user has is greater than the amount that he's trying to send
 		outputs = append(outputs, TxOutput{acc - amount, from}) // create a second output. Is created if there is any left over tokens in the original sender account
