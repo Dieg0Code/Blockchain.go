@@ -1,6 +1,8 @@
 # BlockChain.go
 
-Esta es una implementación de una blockchain en go, puedes encontrar la fuente original *[aquí](https://www.youtube.com/playlist?list=PLpP5MQvVi4PGmNYGEsShrlvuE2B33xV1L)* .
+Esta es una implementación de una blockchain en go
+
+##### puedes encontrar la fuente original *[aquí](https://www.youtube.com/playlist?list=PLpP5MQvVi4PGmNYGEsShrlvuE2B33xV1L)* .
 
 ## ¿Que es un blockchain?
 
